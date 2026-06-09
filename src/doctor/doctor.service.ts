@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, ILike } from 'typeorm';
 
 import { DoctorProfile } from './doctor.entity';
 
@@ -23,9 +23,7 @@ export class DoctorService {
     });
 
     if (existingProfile) {
-      throw new BadRequestException(
-        'Doctor profile already exists',
-      );
+      throw new BadRequestException('Doctor profile already exists');
     }
 
     const profile = this.doctorRepository.create(data);
@@ -36,9 +34,7 @@ export class DoctorService {
     const profiles = await this.doctorRepository.find();
 
     if (!profiles.length) {
-      throw new NotFoundException(
-        'Doctor profile not found',
-      );
+      throw new NotFoundException('Doctor profile not found');
     }
 
     return profiles;
@@ -50,5 +46,53 @@ export class DoctorService {
     return this.doctorRepository.findOne({
       where: { id },
     });
+  }
+
+  async getDoctors(
+    search?: string,
+    specialization?: string,
+    page?: number,
+    limit?: number,
+  ) {
+    page = Number(page) || 1;
+    limit = Number(limit) || 10;
+    if (page < 1 || limit < 1) {
+  throw new BadRequestException(
+    'Invalid pagination values',
+  );
+}
+
+    if (search) {
+      return this.doctorRepository.find({
+        where: {
+          fullName: ILike(`%${search}%`),
+        },
+      });
+    }
+
+    if (specialization) {
+      return this.doctorRepository.find({
+        where: {
+          specialization: ILike(`%${specialization}%`),
+        },
+      });
+    }
+
+    return this.doctorRepository.find({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+  }
+
+  async getDoctorById(id: number) {
+    const doctor = await this.doctorRepository.findOne({
+      where: { id },
+    });
+
+    if (!doctor) {
+      throw new NotFoundException('Doctor not found');
+    }
+
+    return doctor;
   }
 }
