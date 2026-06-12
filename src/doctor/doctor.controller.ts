@@ -27,7 +27,6 @@ export class DoctorController {
   createProfile(@Body() body: CreateDoctorDto, @Req() req: any) {
     return this.doctorService.createProfile({
       ...body,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       userId: req.user.userId,
     });
   }
@@ -49,19 +48,17 @@ export class DoctorController {
   @Get()
   getDoctors(@Req() req: any) {
     return this.doctorService.getDoctors(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
       req.query.search,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
       req.query.specialization,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
       req.query.page,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
       req.query.limit,
     );
   }
 
-  @Get(':id')
-  getDoctorById(@Param('id') id: string) {
-    return this.doctorService.getDoctorById(+id);
-  }
+  // TEMPORARY COMMENT FOR TESTING
+
+  @Get('details/:id')
+getDoctorById(@Param('id') id: string) {
+  return this.doctorService.getDoctorById(+id);
+}
 }

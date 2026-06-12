@@ -11,6 +11,7 @@ import { DoctorModule } from './doctor/doctor.module';
 
 import { TestController } from './test/test.controller';
 import { PatientModule } from './patient/patient.module';
+import { AvailabilityModule } from './availability/availability.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { PatientModule } from './patient/patient.module';
     UsersModule,
     DoctorModule,
     PatientModule,
+    AvailabilityModule,
   ],
   controllers: [AppController, TestController],
   providers: [AppService],
