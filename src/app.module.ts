@@ -11,6 +11,7 @@ import { DoctorModule } from './doctor/doctor.module';
 
 import { TestController } from './test/test.controller';
 import { PatientModule } from './patient/patient.module';
+import { AvailabilityModule } from './availability/availability.module';
 
 @Module({
   imports: [
@@ -27,8 +28,13 @@ import { PatientModule } from './patient/patient.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
+
+        ssl: {
+          rejectUnauthorized: false,
+        },
+
         autoLoadEntities: true,
-        synchronize: false,
+        synchronize: true,
       }),
     }),
 
@@ -36,6 +42,7 @@ import { PatientModule } from './patient/patient.module';
     UsersModule,
     DoctorModule,
     PatientModule,
+    AvailabilityModule,
   ],
   controllers: [AppController, TestController],
   providers: [AppService],
